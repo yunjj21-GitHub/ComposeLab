@@ -3,6 +3,9 @@ package com.yunjung.composelab
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -69,10 +72,15 @@ private fun Greetings(names : List<String> = List(100){"$it"}) {
 
 @Composable
 private fun Greeting(name : String) {
-    val expanded = rememberSaveable { mutableStateOf(false)}
+    var expanded by rememberSaveable { mutableStateOf(false)}
     
-    val extraPadding = if(expanded.value) 48.dp else 0.dp
-    
+    val extraPadding by animateDpAsState(targetValue =
+        if(expanded) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
@@ -86,9 +94,9 @@ private fun Greeting(name : String) {
                 Text(text = name)
             }
             OutlinedButton(
-                onClick = { expanded.value = !expanded.value }
+                onClick = { expanded = !expanded }
             ) {
-                Text(text = if(expanded.value) "Show less" else "Show more")
+                Text(text = if(expanded) "Show less" else "Show more")
             }
         }
     }
