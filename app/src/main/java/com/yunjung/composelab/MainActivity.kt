@@ -1,5 +1,6 @@
 package com.yunjung.composelab
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yunjung.composelab.ui.theme.ComposeLabTheme
@@ -63,7 +65,7 @@ private fun OnBoardingScreen(onContinueClicked : () -> Unit){
 
 @Composable
 private fun Greetings(names : List<String> = List(100){"$it"}) {
-    LazyColumn(modifier = Modifier.padding(4.dp)) {
+    LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
         items(items = names) { name ->
             Greeting(name = name)
         }
@@ -91,7 +93,9 @@ private fun Greeting(name : String) {
                 .padding(bottom = extraPadding)
             ){
                 Text(text = "Hello, ")
-                Text(text = name)
+                Text(text = name, style = MaterialTheme.typography.h4.copy(
+                    fontWeight = FontWeight.ExtraBold
+                ))
             }
             OutlinedButton(
                 onClick = { expanded = !expanded }
@@ -103,6 +107,12 @@ private fun Greeting(name : String) {
 }
 
 /* 화면 미리보기 */
+@Preview(
+    showBackground = true,
+    widthDp = 320,
+    uiMode = UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun DefaultPreview() {
@@ -110,7 +120,6 @@ fun DefaultPreview() {
         Greetings()
     }
 }
-
 @Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
 fun OnBoardingPreview(){
